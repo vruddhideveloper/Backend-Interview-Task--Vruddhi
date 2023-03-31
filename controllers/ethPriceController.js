@@ -11,7 +11,7 @@ const getEthPrice = async (req, res) => {
     const func = async () => {
       const updatedResponse = await axios.get(url);
       console.log(updatedResponse.data);
-      await ethPrice.findOneAndUpdate(
+      const resp = await ethPrice.findOneAndUpdate(
         { ethPrice: { $exists: true } },
         { $set: { ethPrice: updatedResponse.data.ethereum.inr } }
       );

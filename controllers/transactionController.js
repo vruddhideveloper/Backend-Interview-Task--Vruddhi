@@ -19,7 +19,7 @@ const getTransaction = async (req, res) => {
   const response = await axios.get(url);
   // console.log(response.data);
   // res.status(200).json(response.data);
-  console.log(response.data.result);
+  // console.log(response.data.result);
   //balance
   let balance = 0;
   // let size = response.data.result.length();
@@ -32,21 +32,34 @@ const getTransaction = async (req, res) => {
   }
   // converting gwei in eth
   balance = balance * 0.000000001;
-  console.log(balance);
+  // console.log(balance);
 
   //Storing balance and transaction in MongoDB database
   try {
-    const resp = await User.create({
-      address: address,
-      transaction: response.data.result,
-      balance: balance,
-    });
+    const checkUser = await User.findOne({ address: address });
 
-    console.log(resp); // check the response from the database
+    if (checkUser) {
+      //if user is already present in the database
+      console.log(checkUser);
+      await User.findOneAndUpdate(
+        { address },
+        { $set: { transaction: response.transaction, balance } }
+      ).then(() => {
+        res.send({ message: "transaction updated" });
+      });
+    } else {
+      const resp = await User.create({
+        address: address,
+        transaction: response.data.result,
+        balance: balance,
+      });
 
-    res.status(201).send({
-      message: "Address , transaction , balance added successfully",
-    });
+      // console.log(resp); // check the response from the database
+
+      res.status(201).send({
+        message: "Address , transaction , balance added successfully",
+      });
+    }
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
