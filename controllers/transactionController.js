@@ -44,16 +44,18 @@ const getTransaction = async (req, res) => {
       await User.findOneAndUpdate(
         { address },
         { $set: { transaction: response.transaction, balance } }
-      ).then(() => {
-        res.send({ message: "transaction updated" });
+      ).then((response, error) => {
+        if (error) throw error;
+        res.json(response);
       });
     } else {
       await User.create({
         address: address,
         transaction: response.data.result,
         balance: balance,
-      }).then(() => {
-        res.send({ message: "transaction created" });
+      }).then((response, error) => {
+        if (error) throw error;
+        res.json(response);
       });
 
       res.status(201).send({
