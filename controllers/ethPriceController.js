@@ -21,6 +21,7 @@ const getEthPrice = async (req, res) => {
     if (result) {
       console.log("eth is present");
       setInterval(func, 10 * 1000);
+      res.status(201).json(resp);
     } else {
       await ethPrice
         .create({ ethPrice: response.data.ethereum.inr })

@@ -17,7 +17,7 @@ const getTransaction = async (req, res) => {
   const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${API_KEY}`;
 
   const response = await axios.get(url);
-  // console.log(response.data);
+  console.log(response.data);
   // res.status(200).json(response.data);
   // console.log(response.data.result);
   //balance
@@ -43,7 +43,7 @@ const getTransaction = async (req, res) => {
       console.log(checkUser);
       await User.findOneAndUpdate(
         { address },
-        { $set: { transaction: response.transaction, balance } }
+        { $set: { transaction: response.data.result, balance } }
       ).then((response, error) => {
         if (error) throw error;
         res.json(response);
