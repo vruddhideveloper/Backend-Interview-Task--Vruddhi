@@ -25,12 +25,12 @@ const getEthPrice = async (req, res) => {
     // Checking if the ethereum price is stored in mongoDB
     if (result) {
       console.log("eth is present");
-      setInterval(func, 10 * 1000);
+      setInterval(func, 10 * 60 * 1000);
     } else {
       await ethPrice
         .create({ ethPrice: response.data.ethereum.inr })
         .then(() => {
-          setInterval(func, 10 * 1000);
+          setInterval(func, 10 * 60 * 1000);
         });
       res.status(201).send({ message: "Eth Price created successfully" });
     }
