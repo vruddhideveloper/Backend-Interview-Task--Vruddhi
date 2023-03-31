@@ -8,18 +8,19 @@ const getEthPrice = async (req, res) => {
     // Checking if the ethereum price is stored in mongoDB
     const response = await axios.get(url);
     // console.log(response.data);
-    const result = ethPrice.findOne().sort({ createdAt: -1 }).exec();
+    const result = ethPrice.findOne({ ethPrice: { $exists: true } });
     console.log(result.data);
     const func = async () => {
       const updatedResponse = await axios.get(url);
       console.log(updatedResponse.data);
       await ethPrice.findOneAndUpdate(
-        { ethPrice },
+        { ethPrice: { $exists: true } },
         { $set: { ethPrice: updatedResponse.data.ethereum.inr } }
       );
     };
 
-    if (result.data) {
+    if (result) {
+      console.log("eth is present");
       setInterval(func, 10 * 1000);
     } else {
       await ethPrice
