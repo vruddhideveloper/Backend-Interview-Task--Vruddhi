@@ -26,12 +26,8 @@ const getTransaction = async (req, res) => {
   for (let i = 0; i < response.data.result.length; i++) {
     if (response.data.result[i].to === address) {
       balance = balance + Number(response.data.result[i].value);
-
-      // console.log("address is same as to");
     } else if (response.data.result[i].from === address) {
       balance = balance - Number(response.data.result[i].value);
-      // console.log(balance);
-      // console.log("address is same as from");
     }
   }
   // converting gwei in eth
@@ -48,10 +44,10 @@ const getTransaction = async (req, res) => {
 
     console.log(resp); // check the response from the database
 
-    res
-      .status(201)
-      .send({ message: "Address , transaction , balance added successfully" });
-  } catch {
+    res.status(201).send({
+      message: "Address , transaction , balance added successfully",
+    });
+  } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
 };

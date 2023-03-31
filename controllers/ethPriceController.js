@@ -5,9 +5,7 @@ const getEthPrice = async (req, res) => {
     "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=inr";
 
   try {
-    // Checking if the ethereum price is stored in mongoDB
     const response = await axios.get(url);
-    // console.log(response.data);
     const result = ethPrice.findOne({ ethPrice: { $exists: true } });
     console.log(result.data);
     const func = async () => {
@@ -19,6 +17,7 @@ const getEthPrice = async (req, res) => {
       );
     };
 
+    // Checking if the ethereum price is stored in mongoDB
     if (result) {
       console.log("eth is present");
       setInterval(func, 10 * 1000);
