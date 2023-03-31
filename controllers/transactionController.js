@@ -48,13 +48,13 @@ const getTransaction = async (req, res) => {
         res.send({ message: "transaction updated" });
       });
     } else {
-      const resp = await User.create({
+      await User.create({
         address: address,
         transaction: response.data.result,
         balance: balance,
+      }).then(() => {
+        res.send({ message: "transaction created" });
       });
-
-      // console.log(resp); // check the response from the database
 
       res.status(201).send({
         message: "Address , transaction , balance added successfully",
